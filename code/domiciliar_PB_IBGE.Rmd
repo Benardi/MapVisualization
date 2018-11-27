@@ -1,0 +1,47 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(readr)
+library(here)
+library(dplyr)
+```
+
+```{r}
+read_csv(
+  here::here("data/PB/domicilio1-joao-pessoa-utf8.csv")) -> data
+
+data %>% 
+  glimpse()
+```
+
+```{r}
+data[64:101] <- lapply(data[64:101], as.numeric)
+```
+
+```{r}
+data[64:101] %>%
+  mutate(resp_homem = V062 + V063 + V064 + V065 + V066 + V067 + V068 + V069 + V070 + V071 +
+                      V072 + V073 + V074 + V075 + V076 + V077 + V078 + V079 + V080,
+         resp_mulher = V081 + V082 + V083 + V084 + V085 + V086 + V087 + V088 + V089 + V090 +
+                        V091 + V092 + V093 + V094 + V095 + V096 + V097 + V098 + V099) %>%
+  mutate(prop_res_mulher = (resp_mulher / (resp_mulher + resp_homem)),
+         prop_res_homem = (resp_homem / (resp_mulher + resp_homem)))-> values
+```
+
+```{r}
+cbind(data[,1, drop=FALSE],values) -> skimmed_data
+
+skimmed_data %>% 
+  glimpse()
+```
+
+
+```{r}
+skimmed_data %>%
+  na.omit() %>%
+  write_csv(here::here("data/PB/domiciliar1.skimmed.jp.utf8.csv"))
+```
+
