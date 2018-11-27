@@ -2,8 +2,15 @@ library(readr)
 library(here)
 library(dplyr)
 
+oldw <- getOption("warn")
+options(warn = -1)
+
 read_csv2(
-  here::here("data/Basico_AC.csv"),
+  here::here("data/PB/Basico_PB.csv"),
   locale = locale(encoding = "latin1")) %>% 
-  filter(Nome_do_municipio == "RIO BRANCO") %>%
-  write_csv(here::here("data/basico-censo-rio-branco-utf8.csv"))
+  select(-X34) %>%
+  filter(Nome_do_municipio == "JOÃO PESSOA") %>%
+  write_csv(here::here("data/PB/basico-joao-pessoa-utf8.csv"))
+
+options(warn = oldw)
+
